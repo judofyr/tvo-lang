@@ -159,6 +159,14 @@ module Tvo
       stack << (cond ? tval : fval)
     end
 
+    ## Dynamic calls
+    prim 'call' do
+      name = stack.pop
+      body = lookup_method(name)
+      raise "no such method: #{name}" unless body
+      apply(body)
+    end
+
     ## Libraries
     prim 'import' do
       words = stack.pop
