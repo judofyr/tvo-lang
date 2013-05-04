@@ -27,6 +27,10 @@ module Tvo
 
     extend Primitives
 
+    def initialize
+      @fields = {}
+    end
+
     def copy
       dup.instance_eval do
         @fields = @fields.dup
@@ -34,8 +38,9 @@ module Tvo
       end
     end
 
-    def initialize
-      @fields = {}
+    def freeze
+      @fields.freeze
+      super
     end
 
     def set(name, value)
@@ -167,6 +172,7 @@ module Tvo
       data = File.binread(file)
       runner = Eval.new(data).run
       runner.env.set('export', runner.stack.last)
+      runner.env.freeze
       stack << runner.env
     end
 
@@ -324,7 +330,6 @@ module Tvo
       each_token do |token|
         call(token)
       end
-      @env.freeze
       self
     end
 
