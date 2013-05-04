@@ -125,7 +125,7 @@ module Tvo
     prim 'import' do
       words = stack.pop
       words.each do |word|
-        env.define(word.name, [word])
+        env.define(word.name, List[word])
       end
     end
 
