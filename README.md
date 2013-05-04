@@ -1,7 +1,7 @@
 # Tvo
 
-Tvo is a concatenative, immutable, functional object-oriented
-programming language.
+Tvo is a concatenative, functional, object-oriented programming
+language.
 
 ```
 # Concatenative
