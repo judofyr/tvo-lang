@@ -39,7 +39,7 @@ module Tvo
     end
 
     def set(name, value)
-      @fields[name] = [value]
+      @fields[name] = List[value]
       self
     end
 
@@ -160,7 +160,7 @@ module Tvo
     end
   end
 
-  class List < Array
+  class List
     CORE = File.binread(PATH + 'list.tvo')
 
     extend Primitives
@@ -172,22 +172,56 @@ module Tvo
     def lookup(name)
       self.class.lookup_primitives(name) || List.helper.lookup(name)
     end
+    
+    attr_reader :head, :tail
+
+    def initialize(head = nil, tail = nil)
+      @head = head
+      @tail = tail
+      freeze
+    end
+
+    NULL = new
+
+    def self.[](*items)
+      if items.empty?
+        NULL
+      else
+        head, *tail = *items
+        new(head, self[*tail])
+      end
+    end
+
+    def each
+      cons = self
+      while cons.tail
+        yield cons.head
+        cons = cons.tail
+      end
+      self
+    end
+
+    include Enumerable
+
+    def inspect
+      to_a.inspect
+    end
 
     prim 'null' do
       list = stack.pop
-      stack << list.empty?
+      stack << list.tail.nil?
     end
 
     prim 'cons' do
-      list = stack.pop
-      ele = stack.pop
-      stack << List[ele, *list]
+      tail = stack.pop
+      head = stack.pop
+      stack << List.new(head, tail)
     end
 
     prim 'uncons' do
       list = stack.pop
-      stack << list.first
-      stack << List[*list[1..-1]]
+      stack << list.head
+      stack << list.tail
     end
   end
 
@@ -273,12 +307,12 @@ module Tvo
     end
 
     def next_list(stop)
-      res = List.new
+      res = []
       until @scanner.skip(stop)
         token = next_token
         res << token if token
       end
-      res
+      List[*res]
     end
 
     ## Evaluator
@@ -304,7 +338,7 @@ module Tvo
         raise "No such word: #{token.name}" unless body
         apply(body)
       else
-        raise "Unknown type: #{token}"
+        raise "Unknown type: #{token.inspect}"
       end
     end
 
@@ -318,7 +352,7 @@ module Tvo
       case body
       when Proc
         instance_eval(&body)
-      when Array
+      when List
         body.each { |token| call(token) }
       else
         raise body.inspect
