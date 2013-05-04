@@ -1,7 +1,15 @@
 :swapd ( X Y Z -- Y X Z ) [swap] dip ;
-:popd ( X Y -- Y ) [pop]  dip ;
+:popd ( X Y -- Y ) [pop] dip ;
 
 :size ( -- n ) "stack << stack.size" eval ;
+
+:with ( [code] -- )
+  # `obj [.name] with` is equal to `obj dup [.name] dip`
+  #
+  # This is useful when you're accessing fields/methods:
+  #   me  [.a] with  .b  +
+  [dup] dip dip
+;
 
 :zero ( n -- bool ) 0 = ;
 :pred ( n -- n ) 1 - ;
