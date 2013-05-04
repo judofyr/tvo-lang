@@ -4,5 +4,5 @@
 :pred 1 - ;
 :succ 1 + ;
 
-:use  load export import ;
+:use  load export import pop ;
 
