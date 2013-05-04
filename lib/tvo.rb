@@ -117,8 +117,21 @@ module Tvo
       end
     end
 
+    prim '=' do
+      a = stack.pop
+      b = stack.pop
+      stack << (b == a)
+    end
+
     prim 'not' do
       stack << !stack.pop
+    end
+
+    prim '?' do
+      fval = stack.pop
+      tval = stack.pop
+      cond = stack.pop
+      stack << (cond ? tval : fval)
     end
 
     ## Libraries
@@ -138,6 +151,14 @@ module Tvo
     end
 
     ## Helpers
+    prim 'write' do
+      print(stack.pop)
+    end
+
+    prim 'print' do
+      puts(stack.pop)
+    end
+
     prim '.' do
       puts stack.pop.inspect
     end
@@ -288,7 +309,7 @@ module Tvo
       end
     end
 
-    WORD = /[\w*-.+\/]+/
+    WORD = /[\w*-.+\/=?]+/
     def _next_token
       case
       when @scanner.scan(/"(.*?)"/)
