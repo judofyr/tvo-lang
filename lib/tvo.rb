@@ -324,6 +324,7 @@ module Tvo
       each_token do |token|
         call(token)
       end
+      @env.freeze
       self
     end
 
