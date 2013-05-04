@@ -11,6 +11,10 @@ module Tvo
       assert_equal 4, tvo('2 2 +')
       assert_equal 2, tvo('4 2 /')
     end
+
+    def test_dip
+      assert_equal 3, tvo('1 2 4 [+] dip pop')
+    end
   end
 end
 
