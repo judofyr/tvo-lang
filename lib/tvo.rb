@@ -150,6 +150,11 @@ module Tvo
       stack << runner.env
     end
 
+    prim 'eval' do
+      code = stack.pop
+      instance_eval(code)
+    end
+
     ## Helpers
     prim 'write' do
       print(stack.pop)
