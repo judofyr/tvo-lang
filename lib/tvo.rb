@@ -109,8 +109,12 @@ module Tvo
     end
 
     ## Operators
-    prim '*' do
-      stack << stack.pop * stack.pop
+    %w[+ - * /].each do |op|
+      prim op do
+        a = stack.pop
+        b = stack.pop
+        stack << b.send(op, a)
+      end
     end
 
     prim 'not' do
