@@ -1,0 +1,29 @@
+rec
+:concat ( list list2 -- [*list *list2] )
+  swap
+  [null] [pop]
+  [uncons swapd]
+  [cons]
+  linrec
+;
+
+:wrap ( ele list list2 -- [*list ele *list2] )
+  swapd cons  concat
+;
+
+:reverse
+  [null] []
+  [uncons]
+  [swap  list cons  concat]
+  linrec
+;
+
+:map ( fn list -- list2 )
+  swap
+  [ [null] [] ] dip
+  [uncons] [dip] wrap
+  [cons]
+  linrec
+;
+
+
