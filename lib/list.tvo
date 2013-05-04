@@ -1,4 +1,13 @@
 rec
+
+:head ( list -- head )
+  uncons pop
+;
+
+:tail ( list -- tail )
+  uncons popd
+;
+
 :concat ( list list2 -- [*list *list2] )
   swap
   [null] [pop]

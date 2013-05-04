@@ -1,4 +1,5 @@
 :swapd [swap] dip ;
+:popd  [pop]  dip ;
 
 :size "stack << stack.size" eval ;
 
