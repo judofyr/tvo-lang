@@ -39,7 +39,7 @@ module Tvo
     end
 
     def set(name, value)
-      @fields[name] = List[value]
+      @fields[name] = proc { stack.pop; stack << value }
       self
     end
 
