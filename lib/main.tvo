@@ -1,2 +1,4 @@
 :swapd [swap] dip ;
 
+:use  load export import ;
+

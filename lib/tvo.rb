@@ -123,12 +123,18 @@ module Tvo
 
     ## Libraries
     prim 'import' do
-      file = stack.pop
-      data = File.binread(file)
-      words = Eval.new(data).run.stack.last
+      words = stack.pop
       words.each do |word|
         env.define(word.name, [word])
       end
+    end
+
+    prim 'load' do
+      file = stack.pop
+      data = File.binread(file)
+      runner = Eval.new(data).run
+      runner.env.set('export', runner.stack.last)
+      stack << runner.env
     end
 
     ## Helpers
