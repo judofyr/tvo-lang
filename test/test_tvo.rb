@@ -74,6 +74,28 @@ module Tvo
       assert_equal 'Hello', tvo('rec  :hello "Hello" ;  "hello" call')
     end
 
+    def test_getter_delegation
+      assert_equal 'Hello world!', tvo(<<-EOF)
+        rec  "Hello " =hello
+        rec  "world!" =world
+        =^parent
+        dup [.hello] dip
+        .world
+        +
+      EOF
+    end
+
+    def test_method_delegation
+      assert_equal 'Hello world!', tvo(<<-EOF)
+        rec  :hello pop "Hello " ;
+        rec  :world pop "world!" ;
+        =^parent
+        dup [hello] dip
+        world
+        +
+      EOF
+    end
+
     def test_namespace_method
       assert_equal 4, tvo(':square dup * ;  2 square')
     end

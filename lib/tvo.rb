@@ -234,7 +234,11 @@ module Tvo
     end
 
     def get(name)
-      @fields.fetch(name)
+      if parent
+        @fields.fetch(name) { parent.get(name) }
+      else
+        @fields.fetch(name)
+      end
     end
 
     def set(name, value)
@@ -250,7 +254,11 @@ module Tvo
     end
 
     def lookup(name)
-      @methods[name]
+      @methods[name] || (parent.lookup(name) if parent)
+    end
+
+    def parent
+      @fields['^parent']
     end
   end
 
@@ -383,7 +391,7 @@ module Tvo
       end
     end
 
-    WORD = /[\w*-.+\/=?]+/
+    WORD = /[\w*-.+\/=?^]+/
     def _next_token
       case
       when @scanner.scan(/"(.*?)"/)
