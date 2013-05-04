@@ -1,0 +1,8 @@
+[1 2 3]
+
+dup
+[2 *] swap map
+
+concat reverse
+.
+
