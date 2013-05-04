@@ -33,6 +33,14 @@ rec
   tailrec
 ;
 
+:foldl fold ;
+
+:foldr ( aggr fn list -- v )
+  swap
+  [ [null] [pop] [uncons swapd] ] dip
+  linrec
+;
+
 :sum ( list -- sum )
   [ 0 [+] ] dip fold
 ;
