@@ -341,6 +341,7 @@ module Tvo
         @prefix_stack.pop
       when @scanner.scan(/\(.*?\)/)
       when @scanner.scan(/\s+/)
+      when @scanner.scan(/#[^\n]+/m)
       when @scanner.scan(/#{WORD}/)
         Word.new(@scanner[0], @env)
       else
