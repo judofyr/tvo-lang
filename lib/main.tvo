@@ -1,11 +1,11 @@
-:swapd [swap] dip ;
-:popd  [pop]  dip ;
+:swapd ( X Y Z -- Y X Z ) [swap] dip ;
+:popd ( X Y -- Y ) [pop]  dip ;
 
-:size "stack << stack.size" eval ;
+:size ( -- n ) "stack << stack.size" eval ;
 
-:zero 0 = ;
-:pred 1 - ;
-:succ 1 + ;
+:zero ( n -- bool ) 0 = ;
+:pred ( n -- n ) 1 - ;
+:succ ( n -- n ) 1 + ;
 
-:use  load export import pop ;
+:use ( str -- ) load export import pop ;
 
