@@ -327,5 +327,3 @@ module Tvo
   end
 end
 
-Tvo::Eval.new(File.binread(ARGV[0])).run
-
