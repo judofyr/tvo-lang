@@ -26,4 +26,16 @@ rec
   linrec
 ;
 
+:fold ( aggr fn list -- v )
+  swap
+  [ [null] [pop] ] dip
+  [uncons] [dip] wrap
+  []
+  linrec
+;
+
+:sum ( list -- sum )
+  [ 0 [+] ] dip fold
+;
+
 
