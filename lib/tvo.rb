@@ -214,11 +214,11 @@ module Tvo
     end
 
     ## Helpers
-    prim 'write' do
+    prim 'print' do
       print(stack.pop)
     end
 
-    prim 'print' do
+    prim 'puts' do
       puts(stack.pop)
     end
 
