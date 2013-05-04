@@ -57,6 +57,10 @@ module Tvo
       self.class.lookup_primitives(name) || @fields[name]
     end
 
+    def inspect
+      "Environment(#{@fields.keys.join(', ')})"
+    end
+
     ### Primitives
 
     ## Stack primitives
