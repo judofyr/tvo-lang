@@ -30,8 +30,7 @@ rec
   swap
   [ [null] [pop] ] dip
   [uncons] [dip] wrap
-  []
-  linrec
+  tailrec
 ;
 
 :sum ( list -- sum )

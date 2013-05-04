@@ -99,6 +99,26 @@ module Tvo
       aux[]
     end
 
+    prim 'tailrec' do
+      recur = stack.pop
+      bottom = stack.pop
+      switch = stack.pop
+
+      while true
+        save = stack.dup
+        apply(switch)
+        res = stack.last
+        self.stack = save
+
+        if res
+          apply(bottom)
+          break
+        else
+          apply(recur)
+        end
+      end
+    end
+
     ## Data structures
     prim 'rec' do
       stack << Record.new
