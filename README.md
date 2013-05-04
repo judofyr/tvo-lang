@@ -9,7 +9,7 @@ language.
 
 # Functional
 :square dup * ;
-sqaure [1 2 3] map  .
+[square] [1 2 3] map  .
 
 # Object-oriented
 =Person{
