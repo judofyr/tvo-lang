@@ -167,6 +167,19 @@ module Tvo
       apply(body)
     end
 
+    prim 'get' do
+      name = stack.pop
+      base = stack.pop
+      stack << base.get(name)
+    end
+
+    prim 'set' do
+      name = stack.pop
+      value = stack.pop
+      base = stack.pop
+      stack << base.set(name, value)
+    end
+
     ## Libraries
     prim 'import' do
       words = stack.pop
