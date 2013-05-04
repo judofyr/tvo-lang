@@ -254,6 +254,17 @@ module Tvo
       stack << list.head
       stack << list.tail
     end
+
+    prim 'each' do
+      list = stack.pop
+      fn = stack.pop
+      save = stack.dup
+      list.each do |ele|
+        stack << ele
+        apply(fn)
+        self.stack = save
+      end
+    end
   end
 
   class Getter < Struct.new(:name)
