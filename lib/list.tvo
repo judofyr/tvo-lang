@@ -16,10 +16,6 @@ rec
   linrec
 ;
 
-:wrap ( ele list list2 -- [*list ele *list2] )
-  swapd cons  concat
-;
-
 :reverse
   [null] []
   [uncons]
@@ -30,7 +26,7 @@ rec
 :map ( fn list -- list2 )
   swap
   [ [null] [] ] dip
-  [uncons] [dip] wrap
+  [uncons _ dip]
   [cons]
   linrec
 ;
@@ -38,7 +34,7 @@ rec
 :fold ( aggr fn list -- v )
   swap
   [ [null] [pop] ] dip
-  [uncons] [dip] wrap
+  [uncons _ dip]
   tailrec
 ;
 
