@@ -1,21 +1,21 @@
-:swapd ( X Y Z -- Y X Z ) [swap] dip ;
-:popd ( X Y -- Y ) [pop] dip ;
-:dupd ( X Y -- X X Y ) [dup] dip ;
+:swapd ( X Y Z -- Y X Z )  [swap] dip ;
+:popd ( X Y -- Y )  [pop] dip ;
+:dupd ( X Y -- X X Y )  [dup] dip ;
 
-:size ( -- n ) "stack << stack.size" eval ;
+:size ( -- n )  "stack << stack.size" eval ;
 
 :with ( [code] -- )
   \ `obj [.name] with` is equal to `obj dup [.name] dip`
   [dup] dip dip
 ;
 
-:true 0 zero ;
-:false true not ;
-:if ( cond [t] [f] -- ) ? i ;
+:true ( -- true )  0 zero ;
+:false ( -- false )  true not ;
+:if ( cond [t] [f] -- )  ? i ;
 
-:zero ( n -- bool ) 0 = ;
-:pred ( n -- n ) 1 - ;
-:succ ( n -- n ) 1 + ;
+:zero ( n -- bool )  0 = ;
+:pred ( n -- n )  1 - ;
+:succ ( n -- n )  1 + ;
 
-:use ( str -- ) load export import pop ;
+:use ( str -- )  load export import pop ;
 
