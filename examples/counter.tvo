@@ -1,0 +1,17 @@
+=counter{
+  rec
+  :call  [peek] with  next ;
+  :next  .value succ make-counter-from ;
+  :peek  .value ;
+}
+
+:make-counter-from ( n -- counter )
+  counter
+  swap =value
+;
+
+:print-inc  i [.] dip ;
+:print-peek  [peek .] with ;
+
+0 make-counter-from  print-peek next print-peek print-inc print-inc
+
