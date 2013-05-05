@@ -430,7 +430,7 @@ module Tvo
     ## Evaluator
     def call(token)
       case token
-      when String, Integer, List, Record, Environment
+      when String, Integer, List, Record, Environment, true, false
         @stack << token
       when Getter
         base = @stack.pop
