@@ -1,0 +1,111 @@
+\ Lazy lists in Tvo
+
+\ A lazy list is a record (to be implemented).
+rec =lazy-list
+
+\ More precisely, a lazy list has a head (like regular lists) and a
+\ continuation. The continuation is a code block which should return
+\ another lazy list when invoked.
+:lazy-make ( head fn -- list )
+  lazy-list
+  swap =cont
+  swap =head
+;
+
+\ Let's expand our definition of a lazy list.
+lazy-list
+  \ A lazy list is never null. The tail should return a regular empty
+  \ list when it's done.
+  :null ( list -- false ) pop false ;
+  :head ( list -- head ) .head ;
+  :tail ( list -- tail ) .cont i ;
+  :uncons ( list -- head tail ) [head] with  tail ;
+  
+  \ Drops the first n values of the lazy list
+  :drop ( n list -- list2 )
+    swap
+    [zero] [pop]
+    [pred [tail] dip]
+    tailrec
+  ;
+
+  \ Take builds a regular list from a lazy list
+  :take ( n list -- list2 )
+    swap
+    [zero] [pop pop []]
+    [pred [uncons] dip]
+    [cons]
+    linrec
+  ;
+=lazy-list
+
+\ 1 lazy-from   returns a lazy list of all numbers starting from 1.
+:lazy-from ( n -- list )
+  dup
+  succ [lazy-from] cons
+  lazy-make
+;
+
+\ We'll introduce a helper word to make the following code clearer.
+\ It invokes a block and then leaves the block on top again.
+:with-i ( fn -- fn[] fn ) [i] with ;
+
+\ 0 [2 +]   returns a lazy list of all even numbers.
+:lazy-from-by
+  dupd
+  with-i [lazy-from-by] cons cons
+  lazy-make
+;
+
+\ Next we're going to implement map. We first define partial-map
+\ which unconses a lazy list and applies the block to the head:
+:partial-map ( fn list -- fn[head] fn tail )
+  uncons [swap with-i] dip
+;
+
+lazy-list
+  :map ( fn list -- list )
+    dup null
+    [popd]
+    [
+      partial-map
+      [map] cons cons
+      lazy-make
+    ]
+    if
+  ;
+=lazy-list
+
+\ For filter we're going to need another helper word. I'm calling this
+\ `check` and it takes a value and a block, invokes the block with the
+\ value on top, but also ensures that there are copies of the original
+\ values.
+:check ( val fn -- val fn bool )
+  dupd with-i swap
+;
+
+:filter-aux ( fn list -- list )
+  dup null [popd]
+  [
+    uncons swapd ( head fn tail )
+    [check] dip  \ Checks if the head matches our filter
+    swap         \ Bring the bool to the top
+    [ [filter-aux] cons cons lazy-make ]
+    [ [popd] dip filter-aux ]
+    if
+  ]
+  if
+;
+
+lazy-list
+  :filter ( fn list -- list ) filter-aux ;
+=lazy-list
+
+\ Lets define some lazy lists
+=naturals{0 lazy-from}
+=positives{1 lazy-from}
+=evens{0 [2 +] lazy-from-by}
+=squares{positives  [dup *] swap map }
+
+squares  [20 >] swap filter  [5] dip take .
+
