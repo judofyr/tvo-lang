@@ -1,5 +1,6 @@
 :swapd ( X Y Z -- Y X Z ) [swap] dip ;
 :popd ( X Y -- Y ) [pop] dip ;
+:dupd ( X Y -- X X Y ) [dup] dip ;
 
 :size ( -- n ) "stack << stack.size" eval ;
 
