@@ -5,10 +5,7 @@
 :size ( -- n ) "stack << stack.size" eval ;
 
 :with ( [code] -- )
-  # `obj [.name] with` is equal to `obj dup [.name] dip`
-  #
-  # This is useful when you're accessing fields/methods:
-  #   me  [.a] with  .b  +
+  \ `obj [.name] with` is equal to `obj dup [.name] dip`
   [dup] dip dip
 ;
 
