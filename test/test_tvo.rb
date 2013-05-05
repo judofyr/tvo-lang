@@ -115,6 +115,10 @@ module Tvo
       assert_equal 4, tvo('=four{4}  four')
     end
 
+    def test_macros
+      assert_equal 4, tvo('2 dup [_ _ +] i')
+    end
+
     def test_lists
       assert tvo('list null')
       assert_equal 1, tvo('1 list cons head')

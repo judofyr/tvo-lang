@@ -354,6 +354,8 @@ module Tvo
     end
   end
 
+  Placeholder = :placeholder
+
   class Eval
     attr_accessor :ns, :stack
 
@@ -411,6 +413,8 @@ module Tvo
       when @scanner.scan(/\(.*?\)/)
       when @scanner.scan(/\s+/)
       when @scanner.scan(/(#|\\)[^\n]*/m)
+      when @scanner.scan(/_\b/)
+        Placeholder
       when @scanner.scan(/#{WORD}/)
         Word.new(@scanner[0], @ns)
       else
@@ -430,8 +434,10 @@ module Tvo
     ## Evaluator
     def call(token)
       case token
-      when String, Integer, List, Record, Namespace, true, false
+      when String, Integer, Record, Namespace, true, false
         @stack << token
+      when List
+        @stack << expand_placeholders(token)
       when Getter
         base = @stack.pop
         @stack << base.get(token.name)
@@ -452,6 +458,17 @@ module Tvo
       else
         raise "Unknown type: #{token.inspect}"
       end
+    end
+
+    def expand_placeholders(list)
+      List[*list.map do |ele|
+        case ele
+        when Placeholder
+          @stack.pop
+        else
+          ele
+        end
+      end]
     end
 
     def lookup_method(name)
