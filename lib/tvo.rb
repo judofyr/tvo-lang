@@ -84,6 +84,11 @@ module Tvo
       stack << top
     end
 
+    prim 'i' do
+      code = stack.pop
+      apply(code)
+    end
+
     prim 'linrec' do
       after = stack.pop
       before = stack.pop
