@@ -18,6 +18,11 @@ module Tvo
       end
     end
 
+    def test_boolean
+      assert tvo('true')
+      refute tvo('false')
+    end
+
     def test_prefix
       assert_equal 4, tvo('+{2 2}')
     end

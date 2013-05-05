@@ -9,6 +9,8 @@
   [dup] dip dip
 ;
 
+:true 0 zero ;
+:false true not ;
 :if ( cond [t] [f] -- ) ? i ;
 
 :zero ( n -- bool ) 0 = ;
