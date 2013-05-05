@@ -466,8 +466,13 @@ module Tvo
         instance_eval(&body)
       when List
         body.each { |token| call(token) }
+      when Record
+        code = body.lookup('call')
+        raise "Record doesn't implement call: #{body}" if code.nil?
+        stack << body
+        apply(code)
       else
-        raise body.inspect
+        raise "Can't apply: #{body.inspect}"
       end
     end
   end

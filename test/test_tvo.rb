@@ -81,6 +81,10 @@ module Tvo
       assert_equal 'Hello', tvo('rec  :hello "Hello" ;  "hello" call')
     end
 
+    def test_rec_call
+      assert_equal 2, tvo('rec 1 =v  :call .v 1 + ;  i')
+    end
+
     def test_getter_delegation
       assert_equal 'Hello world!', tvo(<<-EOF)
         rec  "Hello " =hello
