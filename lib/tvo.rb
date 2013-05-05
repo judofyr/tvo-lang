@@ -18,11 +18,11 @@ module Tvo
     end
   end
 
-  class Environment
+  class Namespace
     MAIN = File.binread(PATH + 'main.tvo')
 
     def self.main
-      @main ||= Eval.new(MAIN, new).run.env
+      @main ||= Eval.new(MAIN, new).run.ns
     end
 
     extend Primitives
@@ -58,7 +58,7 @@ module Tvo
     end
 
     def inspect
-      "Environment(#{@fields.keys.join(', ')})"
+      "Namespace(#{@fields.keys.join(', ')})"
     end
 
     ### Primitives
@@ -193,7 +193,7 @@ module Tvo
     prim 'import' do
       words = stack.pop
       words.each do |word|
-        env.define(word.name, List[word])
+        ns.define(word.name, List[word])
       end
     end
 
@@ -201,9 +201,9 @@ module Tvo
       file = stack.pop
       data = File.binread(file)
       runner = Eval.new(data).run
-      runner.env.set('export', runner.stack.last)
-      runner.env.freeze
-      stack << runner.env
+      runner.ns.set('export', runner.stack.last)
+      runner.ns.freeze
+      stack << runner.ns
     end
 
     prim 'eval' do
@@ -348,19 +348,19 @@ module Tvo
   class Define < Struct.new(:name, :body)
   end
 
-  class Word < Struct.new(:name, :env)
+  class Word < Struct.new(:name, :ns)
     def inspect
       "Word(#{name})"
     end
   end
 
   class Eval
-    attr_accessor :env, :stack
+    attr_accessor :ns, :stack
 
-    def initialize(data, env = Environment.main.copy)
-      @env = env
+    def initialize(data, ns = Namespace.main.copy)
+      @ns = ns
       @scanner = StringScanner.new(data)
-      @stack = [@env]
+      @stack = [@ns]
       @prefix_stack = []
     end
 
@@ -412,7 +412,7 @@ module Tvo
       when @scanner.scan(/\s+/)
       when @scanner.scan(/(#|\\)[^\n]*/m)
       when @scanner.scan(/#{WORD}/)
-        Word.new(@scanner[0], @env)
+        Word.new(@scanner[0], @ns)
       else
         raise "Parse error: #{@scanner.inspect}"
       end
@@ -430,7 +430,7 @@ module Tvo
     ## Evaluator
     def call(token)
       case token
-      when String, Integer, List, Record, Environment, true, false
+      when String, Integer, List, Record, Namespace, true, false
         @stack << token
       when Getter
         base = @stack.pop
@@ -446,7 +446,7 @@ module Tvo
         base = @stack.pop
         @stack << base.define(token.name, token.body)
       when Word
-        body = token.env.lookup(token.name) || lookup_method(token.name)
+        body = token.ns.lookup(token.name) || lookup_method(token.name)
         raise "No such word: #{token.name}" unless body
         apply(body)
       else
