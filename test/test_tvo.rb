@@ -12,6 +12,8 @@ module Tvo
       assert_equal 2, tvo('4 2 /')
       assert tvo('2 2 =')
       refute tvo('2 3 =')
+      assert tvo('3 2 >')
+      assert tvo('2 3 <')
 
       assert_output "1\n" do
         tvo('1 .')

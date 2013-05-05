@@ -143,7 +143,7 @@ module Tvo
     end
 
     ## Operators
-    %w[+ - * /].each do |op|
+    %w[+ - * / <= < > >=].each do |op|
       prim op do
         a = stack.pop
         b = stack.pop
@@ -389,7 +389,7 @@ module Tvo
       end
     end
 
-    WORD = /[\w*-.+\/=?^]+/
+    WORD = /[\w*-.+\/=?^<>]+/
     def _next_token
       case
       when @scanner.scan(/"(.*?)"/)
