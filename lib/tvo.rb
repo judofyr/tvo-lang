@@ -168,13 +168,6 @@ module Tvo
       stack << (cond ? tval : fval)
     end
 
-    prim 'if' do
-      fbranch = stack.pop
-      tbranch = stack.pop
-      cond = stack.pop
-      apply(cond ? tbranch : fbranch)
-    end
-
     ## Dynamic calls
     prim 'call' do
       name = stack.pop
