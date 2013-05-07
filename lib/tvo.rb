@@ -465,8 +465,6 @@ module Tvo
         case ele
         when Placeholder
           @stack.pop
-        when List
-          expand_placeholders(ele)
         else
           ele
         end

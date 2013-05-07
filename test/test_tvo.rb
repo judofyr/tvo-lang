@@ -116,8 +116,7 @@ module Tvo
     end
 
     def test_macros
-      assert_equal 4, tvo('2 2 [_ _ +] i')
-      assert_equal 4, tvo('1 1  2 2 [[_ _ +]] [+ pop] dip i i')
+      assert_equal 4, tvo('2 dup [_ _ +] i')
     end
 
     def test_lists
