@@ -461,14 +461,9 @@ module Tvo
     end
 
     def expand_placeholders(list)
-      List[*list.map do |ele|
-        case ele
-        when Placeholder
-          @stack.pop
-        else
-          ele
-        end
-      end]
+      List[*list.reverse_each.map do |ele|
+        Placeholder === ele ? @stack.pop : ele
+      end.reverse]
     end
 
     def lookup_method(name)
