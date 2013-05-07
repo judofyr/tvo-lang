@@ -68,8 +68,8 @@ lazy-list
     dup null
     [popd]
     [
-      partial-map
-      [map] cons cons
+      partial-map swap
+      [_ _ map]
       lazy-make
     ]
     if
@@ -90,7 +90,7 @@ lazy-list
     uncons swapd ( head fn tail )
     [check] dip  \ Checks if the head matches our filter
     swap         \ Bring the bool to the top
-    [ [filter-aux] cons cons lazy-make ]
+    [ swap [_ _ filter-aux] lazy-make ]
     [ [popd] dip filter-aux ]
     if
   ]
